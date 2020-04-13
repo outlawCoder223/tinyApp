@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/rancewcampbell/tinyApp/issues"
   },
-  "homepage": "https://github.com/rancewcampbell/tinyApp#readme"
+  "homepage": "https://github.com/rancewcampbell/tinyApp#readme",
+  "devDependencies": {
+    "express": "^4.17.1"
+  }
 }
