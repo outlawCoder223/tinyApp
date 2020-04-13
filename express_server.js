@@ -3,7 +3,7 @@ const app = express();
 const PORT = 8080;
 
 const urlDatabase = {
-  'bwxVn2': 'http://www.lighthouselabes.ca',
+  'bwxVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
 };
 
@@ -26,6 +26,11 @@ app.get('/urls', (req, res) => {
   res.render('urls_index', templateVars);
 });
 
+app.get('/urls/:shortURL', (req, res) => {
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] }
+  res.render('urls_show', templateVars);
+});
+
 app.listen(PORT, () => {
-  console.log(`Exampe app listening on port ${PORT}!`);
+  console.log(`Example app listening on port ${PORT}!`);
 });
