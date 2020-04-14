@@ -10,9 +10,16 @@
   <%- include('partials/_header') %>
   <div class="card text-center">
       <div class="card-header"></div>
-      <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %></h5>
-        <p class="card-text">Short URL: <a href="<%= longURL %>"><%= shortURL %></a></p>
+      <div class="card-body container">
+        <h5 class="card-title row justify-content-center">TinyURL for: <%= longURL %></h5>
+        <p class="card-text row justify-content-center">Short URL: <a href="<%= longURL %>"><%= shortURL %></a></p>
+        <form class="form-inline row justify-content-center" action="/urls" method="POST">
+          <div class="form-group mb-2">
+            <label class="display-5" for="update">Update Long URL:</label>
+            <input class="form-control" type="text" name="Update" placeholder="http://" style="width: 300px; margin: 1em">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </form>
       </div>
       <div class="card-footer text-muted"></div>
   </div>
