@@ -18,11 +18,12 @@ const urlDatabase = {
   '9sm5xK': 'http://www.google.com'
 };
 
+// middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 app.set('view engine', 'ejs');
 
+// Routes
 app.get('/', (req, res) => {
   res.redirect('/urls');
 });
@@ -50,7 +51,6 @@ app.get('/urls/:shortURL', (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render('urls_show', templateVars);
 });
-
 
 app.post('/urls/:shortURL', (req, res) => {
   urlDatabase[req.params.shortURL] = req.body.update;
