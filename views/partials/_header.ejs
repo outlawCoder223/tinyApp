@@ -11,11 +11,15 @@
       </div>
     </div>
     <div class="form-inline my-2 my-lg-0">
-      <span class="navbar-text mr-3"><%= username %></span>
+      <% if (username) { %>
+        <span class="navbar-text mr-3"><%= username %></span>
+        <input class="btn btn-outline-light my-2 my-sm-0" type="button" value="Logout">
+      <% } else { %> 
       <form action="/login" method="POST" >
         <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username" aria-label="Username">
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Login</button>
       </form>
+      <% } %>
     </div>
     
   </nav>
