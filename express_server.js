@@ -4,11 +4,6 @@ const PORT = 8080;
 
 const bodyParser = require('body-parser');
 
-const urlDatabase = {
-  'bwxVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com'
-};
-
 const generateRandomString = function() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -16,6 +11,11 @@ const generateRandomString = function() {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
   return result;
+};
+
+const urlDatabase = {
+  'bwxVn2': 'http://www.lighthouselabs.ca',
+  '9sm5xK': 'http://www.google.com'
 };
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -49,8 +49,11 @@ app.get('/urls/:shortURL', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  console.log(req.body);
-  res.send('OK');
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL;
+  
+  res.redirect(`/urls/${shortURL}`);
+  console.log(urlDatabase);
 });
 
 app.listen(PORT, () => {
