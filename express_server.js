@@ -14,8 +14,14 @@ const generateRandomString = function() {
 };
 
 const urlDatabase = {
-  'bwxVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com'
+  'bwxVn2': { 
+    longURL: 'http://www.lighthouselabs.ca',
+    date: new Date()
+  },
+  '9sm5xK': {
+    longURL: 'http://www.google.com',
+    date: new Date()
+  }
 };
 
 // middleware & rendering engine
