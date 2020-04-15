@@ -31,11 +31,13 @@ const checkEmail = function(users, email) {
 const urlDatabase = {
   'bwxVn2': {
     longURL: 'http://www.lighthouselabs.ca',
-    date: new Date().toDateString()
+    date: new Date().toDateString(),
+    userID: 'user1'
   },
   '9sm5xK': {
     longURL: 'http://www.google.com',
-    date: new Date().toDateString()
+    date: new Date().toDateString(),
+    userID: 'user2'
   }
 };
 
@@ -83,7 +85,8 @@ app.post('/urls', (req, res) => {
   const shortURL = generateUniqueString(urlDatabase);
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
-    date: new Date().toDateString()
+    date: new Date().toDateString(),
+    userID: req.templateVars.user.id
   };
   res.redirect(`/urls/${shortURL}`);
 });
