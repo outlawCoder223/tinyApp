@@ -58,7 +58,7 @@ app.get('/urls.json', (req, res) => {
 
 app.get('/urls', (req, res) => {
   const loggedIn = userDatabase[req.cookies['userID']];
-  let templateVars = {
+  const templateVars = {
     urls: urlDatabase,
     user: loggedIn
   };
