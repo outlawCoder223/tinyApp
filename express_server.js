@@ -13,6 +13,7 @@ const generateRandomString = function() {
   return result;
 };
 
+// 'Databases'
 const urlDatabase = {
   'bwxVn2': { 
     longURL: 'http://www.lighthouselabs.ca',
@@ -23,6 +24,19 @@ const urlDatabase = {
     date: new Date().toDateString()
   }
 };
+
+const userDatabase = {
+  user1: {
+    id: 1,
+    email: 'imauser@fake.com',
+    password: 'papabear'
+  },
+  user2: {
+    id: 2,
+    email: 'appleguy@hotmail.com',
+    password: 'babybear'
+  }
+}
 
 // middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
