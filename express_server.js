@@ -4,14 +4,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 8080;
 
-// const generateRandomString = function() {
-//   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   let result = '';
-//   for (let i = 0; i < 6; i++) {
-//     result += chars[Math.floor(Math.random() * chars.length)];
-//   }
-//   return result;
-// };
 const generateUniqueString = function(databaseObj) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -80,18 +72,6 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-app.get('/register', (req, res) => {
-  const templateVars = { username: req.cookies["username"] }
-  res.render('urls_registration', templateVars)
-});
-
-app.post('/register', (req, res) => {
-  const id = generateUniqueString(userDatabase);
-  userDatabase[id] = {};
-  console.log(userDatabase)
-  res.redirect('/urls');
-});
-
 app.get('/urls/new', (req, res) => {
   const templateVars = {
     username: req.cookies["username"]
@@ -116,6 +96,18 @@ app.post('/urls/:shortURL', (req, res) => {
 
 app.post('/urls/:shortURL/delete', (req, res) => {
   delete urlDatabase[req.params.shortURL]
+  res.redirect('/urls');
+});
+
+app.get('/register', (req, res) => {
+  const templateVars = { username: req.cookies["username"] }
+  res.render('urls_registration', templateVars)
+});
+
+app.post('/register', (req, res) => {
+  const id = generateUniqueString(userDatabase);
+  userDatabase[id] = {};
+  console.log(userDatabase)
   res.redirect('/urls');
 });
 
