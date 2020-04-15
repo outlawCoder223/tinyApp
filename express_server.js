@@ -89,7 +89,9 @@ app.post('/urls', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  if (!req.templateVars.user) res.redirect('/')
+  if (!req.templateVars.user) {
+    res.redirect('/login');
+  }
   res.render('urls_new', req.templateVars);
 });
 
