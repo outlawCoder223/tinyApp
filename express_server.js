@@ -141,20 +141,20 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('urls_login', req.templateVars)
+  res.render('urls_login', req.templateVars);
 });
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const id = checkEmail(userDatabase, email);
   if (!id) {
-    res.status(403).send("Did you enter the correct email?")
+    res.status(403).send("Did you enter the correct email?");
   }
   const checkPassword = userDatabase[id].password === password;
   if (checkPassword) {
-    res.cookie('userID', id)
+    res.cookie('userID', id);
   } else {
-    res.status(403).send("Invalid Password!")
+    res.status(403).send("Invalid Password!");
   }
   res.redirect('/urls');
 });
