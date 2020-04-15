@@ -4,13 +4,25 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 8080;
 
-const generateRandomString = function() {
+// const generateRandomString = function() {
+//   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//   let result = '';
+//   for (let i = 0; i < 6; i++) {
+//     result += chars[Math.floor(Math.random() * chars.length)];
+//   }
+//   return result;
+// };
+const generateUniqueString = function(databaseObj) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   for (let i = 0; i < 6; i++) {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
-  return result;
+  if (!databaseObj[result]) {
+    return result;
+  } else {
+    return generateUniqueString(databaseObj);
+  }
 };
 
 // 'Databases'
@@ -61,7 +73,7 @@ app.get('/urls', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  const shortURL = generateRandomString();
+  const shortURL = generateUniqueString(urlDatabase);
   urlDatabase[shortURL] = {};
   urlDatabase[shortURL].longURL = req.body.longURL;
   urlDatabase[shortURL].date = new Date().toDateString();
@@ -73,9 +85,12 @@ app.get('/register', (req, res) => {
   res.render('urls_registration', templateVars)
 });
 
-// app.post('/register', (req, res) => {
-
-// });
+app.post('/register', (req, res) => {
+  const id = generateUniqueString(userDatabase);
+  userDatabase[id] = {};
+  console.log(userDatabase)
+  res.redirect('/urls');
+});
 
 app.get('/urls/new', (req, res) => {
   const templateVars = {
