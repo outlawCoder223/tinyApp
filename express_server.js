@@ -107,7 +107,10 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
   const id = generateUniqueString(userDatabase);
   userDatabase[id] = {};
-  console.log(userDatabase)
+  userDatabase[id].id = id;
+  userDatabase[id].email = req.body.email;
+  userDatabase[id].password = req.body.password;
+  console.log(userDatabase[id]);
   res.redirect('/urls');
 });
 
