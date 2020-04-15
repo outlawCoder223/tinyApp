@@ -42,8 +42,8 @@ const urlDatabase = {
 const userDatabase = {
   user1: {
     id: 1,
-    email: 'imauser@fake.com',
-    password: 'papabear'
+    email: 'mrpoopybutthole@hotmail.com',
+    password: 'morty'
   },
   user2: {
     id: 2,
@@ -89,11 +89,8 @@ app.post('/urls', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  const loggedIn = userDatabase[req.cookies['userID']];
-  const templateVars = {
-    user: loggedIn
-  };
-  res.render('urls_new', templateVars);
+  if (!req.templateVars.user) res.redirect('/')
+  res.render('urls_new', req.templateVars);
 });
 
 app.get('/urls/:shortURL', (req, res) => {
