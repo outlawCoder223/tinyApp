@@ -110,6 +110,7 @@ app.post('/register', (req, res) => {
   userDatabase[id].id = id;
   userDatabase[id].email = req.body.email;
   userDatabase[id].password = req.body.password;
+  res.cookie('userID', id);
   console.log(userDatabase[id]);
   res.redirect('/urls');
 });
