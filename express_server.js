@@ -19,7 +19,7 @@ const generateUniqueString = function(databaseObj) {
 
 // 'Databases'
 const urlDatabase = {
-  'bwxVn2': { 
+  'bwxVn2': {
     longURL: 'http://www.lighthouselabs.ca',
     date: new Date().toDateString()
   },
@@ -40,7 +40,7 @@ const userDatabase = {
     email: 'appleguy@hotmail.com',
     password: 'babybear'
   }
-}
+};
 
 // middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -58,7 +58,7 @@ app.get('/urls.json', (req, res) => {
 
 app.get('/urls', (req, res) => {
   const loggedIn = userDatabase[req.cookies['userID']];
-  let templateVars = { 
+  let templateVars = {
     urls: urlDatabase,
     user: loggedIn
   };
@@ -77,35 +77,34 @@ app.get('/urls/new', (req, res) => {
   const loggedIn = userDatabase[req.cookies['userID']];
   const templateVars = {
     user: loggedIn
-  }
+  };
   res.render('urls_new', templateVars);
 });
 
 app.get('/urls/:shortURL', (req, res) => {
   const loggedIn = userDatabase[req.cookies['userID']];
-  const templateVars = { 
-    shortURL: req.params.shortURL, 
+  const templateVars = {
+    shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
     user: loggedIn
   };
   res.render('urls_show', templateVars);
 });
 
-
 app.post('/urls/:shortURL', (req, res) => {
   urlDatabase[req.params.shortURL].longURL = req.body.update;
-  res.redirect('/urls')
+  res.redirect('/urls');
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  delete urlDatabase[req.params.shortURL]
+  delete urlDatabase[req.params.shortURL];
   res.redirect('/urls');
 });
 
 app.get('/register', (req, res) => {
   const loggedIn = userDatabase[req.cookies['userID']];
-  const templateVars = { user: loggedIn }
-  res.render('urls_registration', templateVars)
+  const templateVars = { user: loggedIn };
+  res.render('urls_registration', templateVars);
 });
 
 app.post('/register', (req, res) => {
