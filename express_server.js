@@ -57,9 +57,10 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
+  const loggedIn = userDatabase[req.cookies['userID']];
   let templateVars = { 
     urls: urlDatabase,
-    username: req.cookies["username"]
+    user: loggedIn
   };
   res.render('urls_index', templateVars);
 });
@@ -73,17 +74,19 @@ app.post('/urls', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
+  const loggedIn = userDatabase[req.cookies['userID']];
   const templateVars = {
-    username: req.cookies["username"]
+    user: loggedIn
   }
   res.render('urls_new', templateVars);
 });
 
 app.get('/urls/:shortURL', (req, res) => {
+  const loggedIn = userDatabase[req.cookies['userID']];
   const templateVars = { 
     shortURL: req.params.shortURL, 
     longURL: urlDatabase[req.params.shortURL].longURL,
-    username: req.cookies["username"]
+    user: loggedIn
   };
   res.render('urls_show', templateVars);
 });
@@ -100,7 +103,8 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  const templateVars = { username: req.cookies["username"] }
+  const loggedIn = userDatabase[req.cookies['userID']];
+  const templateVars = { user: loggedIn }
   res.render('urls_registration', templateVars)
 });
 
@@ -111,17 +115,16 @@ app.post('/register', (req, res) => {
   userDatabase[id].email = req.body.email;
   userDatabase[id].password = req.body.password;
   res.cookie('userID', id);
-  console.log(userDatabase[id]);
   res.redirect('/urls');
 });
 
 app.post('/login', (req, res) => {
-  res.cookie('username', req.body.username);
+  res.cookie('userID', req.body.username);
   res.redirect('/urls');
 });
 
 app.post('/logout', (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('userID');
   res.redirect('/urls');
 });
 
