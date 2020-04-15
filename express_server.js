@@ -16,11 +16,11 @@ const generateRandomString = function() {
 const urlDatabase = {
   'bwxVn2': { 
     longURL: 'http://www.lighthouselabs.ca',
-    date: new Date()
+    date: new Date().toDateString()
   },
   '9sm5xK': {
     longURL: 'http://www.google.com',
-    date: new Date()
+    date: new Date().toDateString()
   }
 };
 
@@ -48,7 +48,9 @@ app.get('/urls', (req, res) => {
 
 app.post('/urls', (req, res) => {
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = {};
+  urlDatabase[shortURL].longURL = req.body.longURL;
+  urlDatabase[shortURL].date = new Date().toDateString();
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -69,7 +71,7 @@ app.get('/urls/:shortURL', (req, res) => {
 });
 
 app.post('/urls/:shortURL', (req, res) => {
-  urlDatabase[req.params.shortURL] = req.body.update;
+  urlDatabase[req.params.shortURL].longURL = req.body.update;
   res.redirect('/urls')
 });
 
