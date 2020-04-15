@@ -21,7 +21,7 @@ const generateUniqueString = function(databaseObj) {
 const checkEmail = function(users, email) {
   for (let user in users) {
     if (users[user].email === email) {
-      return true;
+      return user;
     }
   }
   return false;
@@ -145,7 +145,17 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  res.cookie('userID', req.body.username);
+  const { email, password } = req.body;
+  const id = checkEmail(userDatabase, email);
+  if (!id) {
+    res.status(403).send("Did you enter the correct email?")
+  }
+  const checkPassword = userDatabase[id].password === password;
+  if (checkPassword) {
+    res.cookie('userID', id)
+  } else {
+    res.status(403).send("Invalid Password!")
+  }
   res.redirect('/urls');
 });
 
