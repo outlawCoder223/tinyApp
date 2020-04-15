@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 8080;
 
+// Helper Functions
 const generateUniqueString = function(databaseObj) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -15,6 +16,15 @@ const generateUniqueString = function(databaseObj) {
   } else {
     return generateUniqueString(databaseObj);
   }
+};
+
+const checkEmail = function(users, email) {
+  for (let user in users) {
+    if (users[user].email === email) {
+      return true;
+    }
+  }
+  return false;
 };
 
 // 'Databases'
@@ -112,6 +122,15 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
   const id = generateUniqueString(userDatabase);
   const { email, password } = req.body;
+  if (!email) {
+    res.status(400).send('Invalid email');
+  }
+  if (!password) {
+    res.status(400).send('Please enter a password.');
+  }
+  if (checkEmail(userDatabase, email)) {
+    res.status(400).send("Email already registered to user.");
+  }
   userDatabase[id] = {
     id,
     email,
