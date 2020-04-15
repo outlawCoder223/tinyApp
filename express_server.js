@@ -46,6 +46,15 @@ const userDatabase = {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set('view engine', 'ejs');
+app.use((req, res, next) => {
+  const loggedIn = userDatabase[req.cookies['userID']];
+  req.templateVars = {
+    urls: urlDatabase,
+    user: loggedIn
+  };
+
+  next();
+});
 
 // Routes
 app.get('/', (req, res) => {
@@ -57,19 +66,15 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const loggedIn = userDatabase[req.cookies['userID']];
-  const templateVars = {
-    urls: urlDatabase,
-    user: loggedIn
-  };
-  res.render('urls_index', templateVars);
+  res.render('urls_index', req.templateVars);
 });
 
 app.post('/urls', (req, res) => {
   const shortURL = generateUniqueString(urlDatabase);
-  urlDatabase[shortURL] = {};
-  urlDatabase[shortURL].longURL = req.body.longURL;
-  urlDatabase[shortURL].date = new Date().toDateString();
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    date: new Date().toDateString()
+  };
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -82,11 +87,10 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.get('/urls/:shortURL', (req, res) => {
-  const loggedIn = userDatabase[req.cookies['userID']];
   const templateVars = {
+    ...req.templateVars,
     shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL,
-    user: loggedIn
+    longURL: urlDatabase[req.params.shortURL].longURL
   };
   res.render('urls_show', templateVars);
 });
@@ -102,17 +106,17 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  const loggedIn = userDatabase[req.cookies['userID']];
-  const templateVars = { user: loggedIn };
-  res.render('urls_registration', templateVars);
+  res.render('urls_registration', req.templateVars);
 });
 
 app.post('/register', (req, res) => {
   const id = generateUniqueString(userDatabase);
-  userDatabase[id] = {};
-  userDatabase[id].id = id;
-  userDatabase[id].email = req.body.email;
-  userDatabase[id].password = req.body.password;
+  const { email, password } = req.body;
+  userDatabase[id] = {
+    id,
+    email,
+    password,
+  };
   res.cookie('userID', id);
   res.redirect('/urls');
 });
