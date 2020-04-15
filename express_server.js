@@ -54,10 +54,14 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-app.get('/urls/registration', (req, res) => {
+app.get('/register', (req, res) => {
   const templateVars = { username: req.cookies["username"] }
   res.render('urls_registration', templateVars)
 });
+
+// app.post('/register', (req, res) => {
+
+// });
 
 app.get('/urls/new', (req, res) => {
   const templateVars = {
