@@ -4,23 +4,23 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 8080;
 
-// class User {
-//   constructor(id, email, password) {
-//     this.id = id;
-//     this.email = email;
-//     this.password = password;
-//   }
+class User {
+  constructor(id, email, password) {
+    this.id = id;
+    this.email = email;
+    this.password = password;
+  }
 
-//   urlsForUser() {
-//     const results = [];
-//     for (let url in urlDatabase) {
-//       if (urlDatabase[url].userID === this.id) {
-//         results.push(urlDatabase[url]);
-//       }
-//     }
-//     return results;
-//   }
-// }
+  urlsForUser() {
+    const results = [];
+    for (let url in urlDatabase) {
+      if (urlDatabase[url].userID === this.id) {
+        results.push(urlDatabase[url]);
+      }
+    }
+    return results;
+  }
+}
 
 // Helper Functions
 const generateUniqueString = function(databaseObj) {
@@ -172,11 +172,7 @@ app.post('/register', (req, res) => {
   } else if (checkEmail(userDatabase, email)) {
     res.status(400).send("Email already registered to user.");
   } else {
-    userDatabase[id] = {
-      id,
-      email,
-      password,
-    };
+    userDatabase[id] = new User(id, email, password);
     res.cookie('userID', id);
     res.redirect('/urls');
   }
