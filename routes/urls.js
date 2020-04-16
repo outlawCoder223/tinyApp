@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { generateUniqueString } = require('../helpers');
-const { urlDatabase, userDatabase } = require('../database');
+const { urlDatabase } = require('../database');
 
 
 router.get('/', (req, res) => {
