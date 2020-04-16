@@ -122,14 +122,20 @@ app.get('/urls', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  const shortURL = generateUniqueString(urlDatabase);
-  urlDatabase[shortURL] = {
-    shortURL,
-    longURL: req.body.longURL,
-    date: new Date().toDateString(),
-    userID: req.templateVars.user.id
-  };
-  res.redirect(`/urls/${shortURL}`);
+  if (req.templateVars.user) {
+    const shortURL = generateUniqueString(urlDatabase);
+    urlDatabase[shortURL] = {
+      shortURL,
+      longURL: req.body.longURL,
+      date: new Date().toDateString(),
+      userID: req.templateVars.user.id
+    };
+    res.redirect(`/urls/${shortURL}`);
+  } else {
+    req.templateVars.message = 'You do not have permission to do this.';
+    res.status(403).render('urls_error', req.templateVars);
+  }
+  
 });
 
 app.get('/urls/new', (req, res) => {
