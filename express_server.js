@@ -4,6 +4,24 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 8080;
 
+// class User {
+//   constructor(id, email, password) {
+//     this.id = id;
+//     this.email = email;
+//     this.password = password;
+//   }
+
+//   urlsForUser() {
+//     const results = [];
+//     for (let url in urlDatabase) {
+//       if (urlDatabase[url].userID === this.id) {
+//         results.push(urlDatabase[url]);
+//       }
+//     }
+//     return results;
+//   }
+// }
+
 // Helper Functions
 const generateUniqueString = function(databaseObj) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -30,14 +48,16 @@ const checkEmail = function(users, email) {
 // 'Databases'
 const urlDatabase = {
   'bwxVn2': {
+    shortURL: 'bwxVn2',
     longURL: 'http://www.lighthouselabs.ca',
     date: new Date().toDateString(),
-    userID: 'user1'
+    userID: 1
   },
   '9sm5xK': {
+    shortURL: '9sm5xK',
     longURL: 'http://www.google.com',
     date: new Date().toDateString(),
-    userID: 'user2'
+    userID: 2
   }
 };
 
@@ -45,12 +65,30 @@ const userDatabase = {
   user1: {
     id: 1,
     email: 'mrpoopybutthole@hotmail.com',
-    password: 'morty'
+    password: 'morty',
+    urlsForUser: function() {
+      const results = [];
+      for (let url in urlDatabase) {
+        if (urlDatabase[url].userID === this.id) {
+          results.push(urlDatabase[url]);
+        }
+      }
+      return results;
+    }
   },
   user2: {
     id: 2,
     email: 'appleguy@hotmail.com',
-    password: 'babybear'
+    password: 'babybear',
+    urlsForUser: function() {
+      const results = [];
+      for (let url in urlDatabase) {
+        if (urlDatabase[url].userID === this.id) {
+          results.push(urlDatabase[url]);
+        }
+      }
+      return results;
+    }
   }
 };
 
@@ -61,6 +99,7 @@ app.set('view engine', 'ejs');
 app.use((req, res, next) => {
   const loggedIn = userDatabase[req.cookies['userID']];
   req.templateVars = {
+    
     urls: urlDatabase,
     user: loggedIn
   };
@@ -78,12 +117,14 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
+  
   res.render('urls_index', req.templateVars);
 });
 
 app.post('/urls', (req, res) => {
   const shortURL = generateUniqueString(urlDatabase);
   urlDatabase[shortURL] = {
+    shortURL,
     longURL: req.body.longURL,
     date: new Date().toDateString(),
     userID: req.templateVars.user.id
@@ -126,20 +167,20 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body;
   if (!email) {
     res.status(400).send('Invalid email');
-  }
-  if (!password) {
+  } else if (!password) {
     res.status(400).send('Please enter a password.');
-  }
-  if (checkEmail(userDatabase, email)) {
+  } else if (checkEmail(userDatabase, email)) {
     res.status(400).send("Email already registered to user.");
+  } else {
+    userDatabase[id] = {
+      id,
+      email,
+      password,
+    };
+    res.cookie('userID', id);
+    res.redirect('/urls');
   }
-  userDatabase[id] = {
-    id,
-    email,
-    password,
-  };
-  res.cookie('userID', id);
-  res.redirect('/urls');
+  
 });
 
 app.get('/login', (req, res) => {
@@ -151,14 +192,16 @@ app.post('/login', (req, res) => {
   const id = checkEmail(userDatabase, email);
   if (!id) {
     res.status(403).send("Did you enter the correct email?");
-  }
-  const checkPassword = userDatabase[id].password === password;
-  if (checkPassword) {
-    res.cookie('userID', id);
   } else {
-    res.status(403).send("Invalid Password!");
+    const checkPassword = userDatabase[id].password === password;
+    if (checkPassword) {
+      res.cookie('userID', id);
+      res.redirect('/urls');
+    } else {
+      res.status(403).send("Invalid Password!");
+    }
   }
-  res.redirect('/urls');
+  
 });
 
 app.post('/logout', (req, res) => {

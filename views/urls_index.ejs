@@ -32,18 +32,20 @@
         </tr>
       </thead>
       <tbody>
-        <% for(let url in urls) { %>
+        <% for(const url of user.urlsForUser()) { %>
+          
           <tr>
-            <td><%= url %></td>
-            <td><a href="<%= urls[url].longURL %>"><%= urls[url].longURL %></a></td>
-            <td><%= urls[url].date %></td>
-            <td><a class="btn btn-outline-primary" href="/urls/<%= url %>" role="button">Edit</a></td>
+            <td><a href="<%= url.longURL %>"><%= url.shortURL %></a></td>
+            <td><%= url.longURL %></td>
+            <td><%= url.date %></td>
+            <td><a class="btn btn-outline-primary" href="/urls/<%= url.shortURL %>" role="button">Edit</a></td>
             <td>
-              <form method="POST" action="/<%= url %>/delete">
+              <form method="POST" action="/urls/<%= url.shortURL %>/delete">
                 <button type="submit" class="btn btn-danger">Delete</button>
               </form>
             </td>
           </tr>
+          
         <% } %>
       </tbody>
     </table>
