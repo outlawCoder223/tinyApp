@@ -12,7 +12,7 @@
       <div class="card-header"></div>
       <div class="card-body pr-0 pl-0">
         <h5 class="card-title ">TinyURL for: <%= longURL %></h5>
-        <p class="card-text ">Short URL: <a href="<%= longURL %>"><%= shortURL %></a></p>
+        <p class="card-text ">Short URL: <%= shortURL %></p>
         <div class="container-fluid bg-light text-muted">
           <h3 class=" row justify-content-center mb-0">Edit</h5>
             <form class="form-inline row justify-content-center margin-0" action="/urls/<%= shortURL %>" method="POST">

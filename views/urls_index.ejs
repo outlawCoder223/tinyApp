@@ -35,7 +35,7 @@
         <% for(const url of user.urlsForUser()) { %>
           
           <tr>
-            <td><a href="<%= url.longURL %>"><%= url.shortURL %></a></td>
+            <td><%= url.shortURL %></td>
             <td><%= url.longURL %></td>
             <td><%= url.date %></td>
             <td><a class="btn btn-outline-primary" href="/urls/<%= url.shortURL %>" role="button">Edit</a></td>

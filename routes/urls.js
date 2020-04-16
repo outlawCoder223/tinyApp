@@ -7,7 +7,13 @@ const { urlDatabase } = require('../database');
 
 
 router.get('/', (req, res) => {
-  res.render('urls_index', req.templateVars);
+  if (req.templateVars.user) {
+    res.render('urls_index', req.templateVars);
+  } else {
+    req.templateVars.message = 'Please log in first!';
+    res.status(403).render('urls_error', req.templateVars);
+  }
+  
 });
 
 // Create new short URL
@@ -27,7 +33,7 @@ router.post('/', (req, res) => {
   }
 });
 
-// new short URL page
+// create new short URL page
 router.get('/new', (req, res) => {
   if (!req.templateVars.user) {
     res.redirect('/login');
@@ -43,7 +49,8 @@ router.get('/:shortURL', (req, res) => {
     req.templateVars.message = 'Not found';
     res.status(404).render('urls_error.ejs', req.templateVars);
   } else if (!req.templateVars.user) {
-    res.redirect('/login');
+    req.templateVars.message = 'Please log-in to view this';
+    res.status(403).render('urls_error', req.templateVars);
   } else if (urlDatabase[url].userID === req.templateVars.user.id) {
     const templateVars = {
       ...req.templateVars,

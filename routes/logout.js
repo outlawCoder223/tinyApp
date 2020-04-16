@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/', (req, res) => {
   // delete cookie :
   req.session = null;
-  res.redirect('/urls');
+  res.redirect('/');
 });
 
 module.exports = router;

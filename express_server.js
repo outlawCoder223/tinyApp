@@ -36,7 +36,7 @@ const logoutRouter = require('./routes/logout');
 
 // Routes
 app.get('/', (req, res) => {
-  res.redirect('/urls');
+  req.templateVars.user ? res.redirect('/urls') : res.render('home', req.templateVars);
 });
 
 app.use('/urls', urlRouter);
