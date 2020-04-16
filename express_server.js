@@ -4,32 +4,15 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcryptjs');
 const { generateUniqueString, checkEmail } = require('./helpers');
+const { urlDatabase, userDatabase } = require('./database');
+
 const PORT = 8080;
 const KEY = 'woeir@mc289ruq%qcrm93';
-class User {
-  constructor(id, email, password) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
-  }
-
-  urlsForUser() {
-    const results = [];
-    for (let url in urlDatabase) {
-      if (urlDatabase[url].userID === this.id) {
-        results.push(urlDatabase[url]);
-      }
-    }
-    return results;
-  }
-}
 
 
 
-// 'Databases'
-const urlDatabase = {};
 
-const userDatabase = {};
+
 
 // middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,6 +31,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+const registerRouter = require('./routes/register')
 
 // Routes
 app.get('/', (req, res) => {
@@ -144,31 +129,31 @@ app.get('/u/:id', (req, res) => {
     res.status(404).render('urls_error', req.templateVars);
   }
 });
+app.use('/register', registerRouter);
 
-app.get('/register', (req, res) => {
-  req.templateVars.user ? res.redirect('/') : res.render('urls_registration', req.templateVars);
-});
+// app.get('/register', (req, res) => {
+//   req.templateVars.user ? res.redirect('/') : res.render('urls_registration', req.templateVars);
+// });
 
-app.post('/register', (req, res) => {
-  const id = generateUniqueString(userDatabase);
-  const hashedPass = bcrypt.hashSync(req.body.password, 10);
-  const email = req.body.email;
-  if (!email) {
-    req.templateVars.message = 'Enter a valid email';
-    res.status(400).render('urls_error', req.templateVars);
-  } else if (!hashedPass) {
-    req.templateVars.message = 'Please enter a password.';
-    res.status(400).render('urls_error', req.templateVars);
-  } else if (checkEmail(userDatabase, email)) {
-    req.templateVars.message = 'That email is already registered to a user!';
-    res.status(400).render('urls_error', req.templateVars);
-  } else {
-    userDatabase[id] = new User(id, email, hashedPass);
-    req.session.user_id = id;
-    res.redirect('/urls');
-  }
-  
-});
+// app.post('/register', (req, res) => {
+//   const id = generateUniqueString(userDatabase);
+//   const hashedPass = bcrypt.hashSync(req.body.password, 10);
+//   const email = req.body.email;
+//   if (!email) {
+//     req.templateVars.message = 'Enter a valid email';
+//     res.status(400).render('urls_error', req.templateVars);
+//   } else if (!hashedPass) {
+//     req.templateVars.message = 'Please enter a password.';
+//     res.status(400).render('urls_error', req.templateVars);
+//   } else if (checkEmail(userDatabase, email)) {
+//     req.templateVars.message = 'That email is already registered to a user!';
+//     res.status(400).render('urls_error', req.templateVars);
+//   } else {
+//     userDatabase[id] = new User(id, email, hashedPass);
+//     req.session.user_id = id;
+//     res.redirect('/urls');
+//   }
+// });
 
 app.get('/login', (req, res) => {
   req.templateVars.user ? res.redirect('/') : res.render('urls_login', req.templateVars);
