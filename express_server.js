@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcryptjs');
+const { generateUniqueString, checkEmail } = require('./helpers');
 const PORT = 8080;
 const KEY = 'woeir@mc289ruq%qcrm93';
 class User {
@@ -23,28 +24,7 @@ class User {
   }
 }
 
-// Helper Functions
-const generateUniqueString = function(databaseObj) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 6; i++) {
-    result += chars[Math.floor(Math.random() * chars.length)];
-  }
-  if (!databaseObj[result]) {
-    return result;
-  } else {
-    return generateUniqueString(databaseObj);
-  }
-};
 
-const checkEmail = function(users, email) {
-  for (let user in users) {
-    if (users[user].email === email) {
-      return user;
-    }
-  }
-  return false;
-};
 
 // 'Databases'
 const urlDatabase = {};
