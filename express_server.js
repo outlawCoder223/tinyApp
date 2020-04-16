@@ -32,6 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
+const uRouter = require('./routes/u');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
@@ -123,15 +124,17 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   }
 });
 
-app.get('/u/:id', (req, res) => {
-  if (req.params.id in urlDatabase) {
-    const url = urlDatabase[req.params.id].longURL;
-    res.redirect(url);
-  } else {
-    req.templateVars.message = 'Not found';
-    res.status(404).render('urls_error', req.templateVars);
-  }
-});
+app.use('/u', uRouter);
+
+// app.get('/u/:id', (req, res) => {
+//   if (req.params.id in urlDatabase) {
+//     const url = urlDatabase[req.params.id].longURL;
+//     res.redirect(url);
+//   } else {
+//     req.templateVars.message = 'Not found';
+//     res.status(404).render('urls_error', req.templateVars);
+//   }
+// });
 app.use('/register', registerRouter);
 
 // app.get('/register', (req, res) => {
