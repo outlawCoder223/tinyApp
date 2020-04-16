@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
   name: 'session',
   keys: [KEY],
-}))
+}));
 app.set('view engine', 'ejs');
 app.use((req, res, next) => {
   const loggedIn = userDatabase[req.session.user_id];
@@ -83,7 +83,7 @@ app.post('/urls', (req, res) => {
 app.get('/urls/new', (req, res) => {
   if (!req.templateVars.user) {
     res.redirect('/login');
-  } else{
+  } else {
     res.render('urls_new', req.templateVars);
   }
 });
@@ -92,9 +92,9 @@ app.get('/urls/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!urlDatabase[url]) {
     req.templateVars.message = 'Not found';
-    res.status(404).render('urls_error.ejs', req.templateVars)
+    res.status(404).render('urls_error.ejs', req.templateVars);
   } else if (!req.templateVars.user) {
-    res.redirect('/login')
+    res.redirect('/login');
   } else if (urlDatabase[url].userID === req.templateVars.user.id) {
     const templateVars = {
       ...req.templateVars,
@@ -155,13 +155,13 @@ app.post('/register', (req, res) => {
   const email = req.body.email;
   if (!email) {
     req.templateVars.message = 'Enter a valid email';
-    res.status(400).render('urls_error', req.templateVars)
+    res.status(400).render('urls_error', req.templateVars);
   } else if (!hashedPass) {
     req.templateVars.message = 'Please enter a password.';
-    res.status(400).render('urls_error', req.templateVars)
+    res.status(400).render('urls_error', req.templateVars);
   } else if (checkEmail(userDatabase, email)) {
-    req.templateVars.message = 'That email is already registered to a user!'
-    res.status(400).render('urls_error', req.templateVars)
+    req.templateVars.message = 'That email is already registered to a user!';
+    res.status(400).render('urls_error', req.templateVars);
   } else {
     userDatabase[id] = new User(id, email, hashedPass);
     req.session.user_id = id;
