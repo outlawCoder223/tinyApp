@@ -3,9 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const { urlDatabase, userDatabase } = require('./database');
-
-const PORT = 8080;
-const KEY = 'woeir@mc289ruq%qcrm93';
+const { PORT, KEY } = require('./constants');
 
 // middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,6 +15,7 @@ app.use(cookieSession({
 
 app.set('view engine', 'ejs');
 
+// middleware to check if logged in and pass around logged in user's data:
 app.use((req, res, next) => {
   const loggedIn = userDatabase[req.session.user_id];
   req.templateVars = {
@@ -27,6 +26,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// Declare routers
 const urlRouter = require('./routes/urls');
 const uRouter = require('./routes/u');
 const registerRouter = require('./routes/register');
