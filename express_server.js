@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcryptjs');
 const PORT = 8080;
-
+const KEY;
 class User {
   constructor(id, email, password) {
     this.id = id;
@@ -54,6 +55,10 @@ const userDatabase = {};
 // middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: [KEY],
+}))
 app.set('view engine', 'ejs');
 app.use((req, res, next) => {
   const loggedIn = userDatabase[req.cookies['userID']];
