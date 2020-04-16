@@ -15,7 +15,7 @@ app.use(cookieSession({
 
 app.set('view engine', 'ejs');
 
-// middleware to check if logged in and pass around logged in user's data:
+// middleware to fetch logged in user's data:
 app.use((req, res, next) => {
   const loggedIn = userDatabase[req.session.user_id];
   req.templateVars = {

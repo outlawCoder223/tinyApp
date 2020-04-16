@@ -1,3 +1,5 @@
+// Routes for /url
+
 const express = require('express');
 const router = express.Router();
 const { generateUniqueString } = require('../helpers');
@@ -5,10 +7,10 @@ const { urlDatabase } = require('../database');
 
 
 router.get('/', (req, res) => {
-  
   res.render('urls_index', req.templateVars);
 });
 
+// Create new short URL
 router.post('/', (req, res) => {
   if (req.templateVars.user) {
     const shortURL = generateUniqueString(urlDatabase);
@@ -23,9 +25,9 @@ router.post('/', (req, res) => {
     req.templateVars.message = 'You do not have permission to do this.';
     res.status(403).render('urls_error', req.templateVars);
   }
-  
 });
 
+// new short URL page
 router.get('/new', (req, res) => {
   if (!req.templateVars.user) {
     res.redirect('/login');
@@ -34,6 +36,7 @@ router.get('/new', (req, res) => {
   }
 });
 
+// short URL info page
 router.get('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!urlDatabase[url]) {
@@ -55,6 +58,7 @@ router.get('/:shortURL', (req, res) => {
   
 });
 
+// short URL update to new long URL
 router.post('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {
@@ -68,6 +72,7 @@ router.post('/:shortURL', (req, res) => {
   }
 });
 
+// delete the short URL
 router.post('/:shortURL/delete', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {

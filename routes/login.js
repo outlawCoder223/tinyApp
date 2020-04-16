@@ -1,3 +1,4 @@
+// Login
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -9,6 +10,7 @@ router.get('/', (req, res) => {
   req.templateVars.user ? res.redirect('/') : res.render('urls_login', req.templateVars);
 });
 
+// User login 
 router.post('/', (req, res) => {
   const { email, password } = req.body;
   const id = checkEmail(userDatabase, email);

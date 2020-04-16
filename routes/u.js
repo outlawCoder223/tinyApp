@@ -1,3 +1,4 @@
+// Short URL redirection to associated long URL
 const express = require('express');
 const router = express.Router();
 const { urlDatabase } = require('../database');

@@ -7,6 +7,7 @@ class User {
     this.password = password;
   }
 
+  // Returns array of URls registered to the User
   urlsForUser() {
     const results = [];
     for (let url in urlDatabase) {
