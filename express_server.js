@@ -140,9 +140,12 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.get('/urls/:shortURL', (req, res) => {
-  if (!req.templateVars.user) {
+  const url = req.params.shortURL;
+  if (!urlDatabase[url]) {
+    res.status(404).send('Not found')
+  } else if (!req.templateVars.user) {
     res.redirect('/login')
-  } else if (req.params.shortURL in req.templateVars.user.urlsForUser) {
+  } else if (urlDatabase[url].userID === req.templateVars.user.id) {
     const templateVars = {
       ...req.templateVars,
       shortURL: req.params.shortURL,
@@ -156,13 +159,27 @@ app.get('/urls/:shortURL', (req, res) => {
 });
 
 app.post('/urls/:shortURL', (req, res) => {
-  urlDatabase[req.params.shortURL].longURL = req.body.update;
-  res.redirect('/urls');
+  const url = req.params.shortURL;
+  if (!req.templateVars.user) {
+    res.redirect('/login');
+  } else if (urlDatabase[url].userID === req.templateVars.user.id) {
+    urlDatabase[req.params.shortURL].longURL = req.body.update;
+    res.redirect('/urls');
+  } else {
+    res.status(403).send('You do not have permission to do this.')
+  }
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect('/urls');
+  const url = req.params.shortURL;
+  if (!req.templateVars.user) {
+    res.redirect('/login');
+  } else if (urlDatabase[url].userID === req.templateVars.user.id) {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect('/urls');
+  } else {
+    res.status(403).send('You do not have permission to do this.')
+  }
 });
 
 app.get('/register', (req, res) => {
