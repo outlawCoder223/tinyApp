@@ -135,14 +135,16 @@ app.post('/urls', (req, res) => {
 app.get('/urls/new', (req, res) => {
   if (!req.templateVars.user) {
     res.redirect('/login');
+  } else{
+    res.render('urls_new', req.templateVars);
   }
-  res.render('urls_new', req.templateVars);
 });
 
 app.get('/urls/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!urlDatabase[url]) {
-    res.status(404).send('Not found')
+    req.templateVars.message = 'Not found';
+    res.status(404).render('urls_error.ejs', req.templateVars)
   } else if (!req.templateVars.user) {
     res.redirect('/login')
   } else if (urlDatabase[url].userID === req.templateVars.user.id) {
