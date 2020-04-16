@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 const registerRouter = require('./routes/register')
-
+const loginRouter = require('./routes/login')
 // Routes
 app.get('/', (req, res) => {
   res.redirect('/urls');
@@ -154,30 +154,30 @@ app.use('/register', registerRouter);
 //     res.redirect('/urls');
 //   }
 // });
+app.use('/login', loginRouter);
+// app.get('/login', (req, res) => {
+//   req.templateVars.user ? res.redirect('/') : res.render('urls_login', req.templateVars);
+// });
 
-app.get('/login', (req, res) => {
-  req.templateVars.user ? res.redirect('/') : res.render('urls_login', req.templateVars);
-});
-
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  const id = checkEmail(userDatabase, email);
-  const hash = userDatabase[id].password;
-  if (!id) {
-    req.templateVars.message = 'Did you enter the correct email?';
-    res.status(403).render('urls_error', req.templateVars);
-  } else {
-    const checkPassword = bcrypt.compareSync(password, hash);
-    if (checkPassword) {
-      req.session.user_id = id;
-      res.redirect('/urls');
-    } else {
-      req.templateVars.message = 'Invalid Password';
-      res.status(403).render('urls_error', req.templateVars);
-    }
-  }
+// app.post('/login', (req, res) => {
+//   const { email, password } = req.body;
+//   const id = checkEmail(userDatabase, email);
+//   const hash = userDatabase[id].password;
+//   if (!id) {
+//     req.templateVars.message = 'Did you enter the correct email?';
+//     res.status(403).render('urls_error', req.templateVars);
+//   } else {
+//     const checkPassword = bcrypt.compareSync(password, hash);
+//     if (checkPassword) {
+//       req.session.user_id = id;
+//       res.redirect('/urls');
+//     } else {
+//       req.templateVars.message = 'Invalid Password';
+//       res.status(403).render('urls_error', req.templateVars);
+//     }
+//   }
   
-});
+// });
 
 app.post('/logout', (req, res) => {
   req.session = null;
