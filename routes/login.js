@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   req.templateVars.user ? res.redirect('/') : res.render('urls_login', req.templateVars);
 });
 
-// User login 
+// User login
 router.post('/', (req, res) => {
   const { email, password } = req.body;
   const id = checkEmail(userDatabase, email);

@@ -1,4 +1,4 @@
-// Register a new user 
+// Register a new user
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   req.templateVars.user ? res.redirect('/') : res.render('urls_registration', req.templateVars);
 });
 
-// Create new User 
+// Create new User
 router.post('/', (req, res) => {
   const id = generateUniqueString(userDatabase);
   // Password must be hashed before saving in database:
