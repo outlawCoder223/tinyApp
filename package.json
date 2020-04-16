@@ -1,8 +1,8 @@
 {
-  "name": "tiny",
+  "name": "tiny_app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Takes a standard URL and creates a 6 character link to the original URL.",
+  "main": "express_server.js",
   "scripts": {
     "start": "./node_modules/.bin/nodemon -L express_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/rancewcampbell/tinyApp.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rance Campbell",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/rancewcampbell/tinyApp/issues"
