@@ -32,8 +32,11 @@ app.use((req, res, next) => {
   next();
 });
 
-const registerRouter = require('./routes/register')
-const loginRouter = require('./routes/login')
+const registerRouter = require('./routes/register');
+const loginRouter = require('./routes/login');
+const logoutRouter = require('./routes/logout');
+
+
 // Routes
 app.get('/', (req, res) => {
   res.redirect('/urls');
@@ -178,11 +181,11 @@ app.use('/login', loginRouter);
 //   }
   
 // });
-
-app.post('/logout', (req, res) => {
-  req.session = null;
-  res.redirect('/urls');
-});
+app.use('/logout', logoutRouter);
+// app.post('/logout', (req, res) => {
+//   req.session = null;
+//   res.redirect('/urls');
+// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
