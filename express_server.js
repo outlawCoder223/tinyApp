@@ -99,9 +99,9 @@ app.set('view engine', 'ejs');
 app.use((req, res, next) => {
   const loggedIn = userDatabase[req.cookies['userID']];
   req.templateVars = {
-    
     urls: urlDatabase,
-    user: loggedIn
+    user: loggedIn,
+    message: null
   };
 
   next();
@@ -153,7 +153,8 @@ app.get('/urls/:shortURL', (req, res) => {
     };
     res.render('urls_show', templateVars);
   } else {
-    res.status(403).send('Access denied')
+    req.templateVars.message = 'Access denied';
+    res.status(403).render('urls_error', req.templateVars);
   }
   
 });
@@ -166,7 +167,8 @@ app.post('/urls/:shortURL', (req, res) => {
     urlDatabase[req.params.shortURL].longURL = req.body.update;
     res.redirect('/urls');
   } else {
-    res.status(403).send('You do not have permission to do this.')
+    req.templateVars.message = 'You do not have permission to do this.';
+    res.status(403).render('urls_error', req.templateVars);
   }
 });
 
@@ -178,7 +180,8 @@ app.post('/urls/:shortURL/delete', (req, res) => {
     delete urlDatabase[req.params.shortURL];
     res.redirect('/urls');
   } else {
-    res.status(403).send('You do not have permission to do this.')
+    req.templateVars.message = 'You do not have permission to do this.';
+    res.status(403).render('urls_error', req.templateVars);
   }
 });
 
@@ -190,11 +193,14 @@ app.post('/register', (req, res) => {
   const id = generateUniqueString(userDatabase);
   const { email, password } = req.body;
   if (!email) {
-    res.status(400).send('Invalid email');
+    req.templateVars.message = 'Enter a valid email';
+    res.status(400).render('urls_error', req.templateVars)
   } else if (!password) {
-    res.status(400).send('Please enter a password.');
+    req.templateVars.message = 'Please enter a password.';
+    res.status(400).render('urls_error', req.templateVars)
   } else if (checkEmail(userDatabase, email)) {
-    res.status(400).send("Email already registered to user.");
+    req.templateVars.message = 'That email is already registered to a user!'
+    res.status(400).render('urls_error', req.templateVars)
   } else {
     userDatabase[id] = new User(id, email, password);
     res.cookie('userID', id);
@@ -211,14 +217,16 @@ app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const id = checkEmail(userDatabase, email);
   if (!id) {
-    res.status(403).send("Did you enter the correct email?");
+    req.templateVars.message = 'Did you enter the correct email?';
+    res.status(403).render('urls_error', req.templateVars);
   } else {
     const checkPassword = userDatabase[id].password === password;
     if (checkPassword) {
       res.cookie('userID', id);
       res.redirect('/urls');
     } else {
-      res.status(403).send("Invalid Password!");
+      req.templateVars.message = 'Invalid Password';
+      res.status(403).render('urls_error', req.templateVars);
     }
   }
   
