@@ -47,51 +47,9 @@ const checkEmail = function(users, email) {
 };
 
 // 'Databases'
-const urlDatabase = {
-  'bwxVn2': {
-    shortURL: 'bwxVn2',
-    longURL: 'http://www.lighthouselabs.ca',
-    date: new Date().toDateString(),
-    userID: 1
-  },
-  '9sm5xK': {
-    shortURL: '9sm5xK',
-    longURL: 'http://www.google.com',
-    date: new Date().toDateString(),
-    userID: 2
-  }
-};
+const urlDatabase = {};
 
-const userDatabase = {
-  user1: {
-    id: 1,
-    email: 'mrpoopybutthole@hotmail.com',
-    password: 'morty',
-    urlsForUser: function() {
-      const results = [];
-      for (let url in urlDatabase) {
-        if (urlDatabase[url].userID === this.id) {
-          results.push(urlDatabase[url]);
-        }
-      }
-      return results;
-    }
-  },
-  user2: {
-    id: 2,
-    email: 'appleguy@hotmail.com',
-    password: 'babybear',
-    urlsForUser: function() {
-      const results = [];
-      for (let url in urlDatabase) {
-        if (urlDatabase[url].userID === this.id) {
-          results.push(urlDatabase[url]);
-        }
-      }
-      return results;
-    }
-  }
-};
+const userDatabase = {};
 
 // middleware & rendering engine
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -236,11 +194,13 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const id = checkEmail(userDatabase, email);
+  const hash = userDatabase[id].password;
   if (!id) {
     req.templateVars.message = 'Did you enter the correct email?';
     res.status(403).render('urls_error', req.templateVars);
   } else {
-    const checkPassword = userDatabase[id].password === password;
+    const checkPassword = bcrypt.compareSync(password, hash);
+    // const checkPassword = userDatabase[id].password === password;
     if (checkPassword) {
       res.cookie('userID', id);
       res.redirect('/urls');
