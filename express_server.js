@@ -228,7 +228,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('urls_login', req.templateVars);
+  req.templateVars.user ? res.redirect('/') : res.render('urls_login', req.templateVars);
 });
 
 app.post('/login', (req, res) => {
