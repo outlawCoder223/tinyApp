@@ -140,12 +140,19 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.get('/urls/:shortURL', (req, res) => {
-  const templateVars = {
-    ...req.templateVars,
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL
-  };
-  res.render('urls_show', templateVars);
+  if (!req.templateVars.user) {
+    res.redirect('/login')
+  } else if (req.params.shortURL in req.templateVars.user.urlsForUser) {
+    const templateVars = {
+      ...req.templateVars,
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL
+    };
+    res.render('urls_show', templateVars);
+  } else {
+    res.status(403).send('Access denied')
+  }
+  
 });
 
 app.post('/urls/:shortURL', (req, res) => {
