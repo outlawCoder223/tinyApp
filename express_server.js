@@ -204,7 +204,7 @@ app.get('/u/:id', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('urls_registration', req.templateVars);
+  req.templateVars.user ? res.redirect('/') : res.render('urls_registration', req.templateVars);
 });
 
 app.post('/register', (req, res) => {
