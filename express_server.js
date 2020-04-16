@@ -187,6 +187,16 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   }
 });
 
+app.get('/u/:id', (req, res) => {
+  if (req.params.id in urlDatabase) {
+    const url = urlDatabase[req.params.id].longURL;
+    res.redirect(url);
+  } else {
+    req.templateVars.message = 'Not found';
+    res.status(404).render('urls_error', req.templateVars);
+  }
+});
+
 app.get('/register', (req, res) => {
   res.render('urls_registration', req.templateVars);
 });
