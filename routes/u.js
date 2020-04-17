@@ -6,6 +6,7 @@ const { urlDatabase } = require('../database');
 router.get('/:id', (req, res) => {
   if (req.params.id in urlDatabase) {
     const url = urlDatabase[req.params.id].longURL;
+    urlDatabase[req.params.id].visits += 1;
     res.redirect(url);
   } else {
     req.templateVars.message = 'Not found';

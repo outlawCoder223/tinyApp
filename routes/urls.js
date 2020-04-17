@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const { generateUniqueString } = require('../helpers');
 const { urlDatabase } = require('../database');
+const Url = require('../newURL');
 
 
 router.get('/', (req, res) => {
@@ -20,12 +21,16 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   if (req.templateVars.user) {
     const shortURL = generateUniqueString(urlDatabase);
-    urlDatabase[shortURL] = {
-      shortURL,
-      longURL: req.body.longURL,
-      date: new Date().toDateString(),
-      userID: req.templateVars.user.id
-    };
+    const longURL = req.body.longURL;
+    const userID = req.templateVars.user.id;
+    // urlDatabase[shortURL] = {
+    //   shortURL,
+    //   longURL: req.body.longURL,
+    //   date: new Date().toDateString(),
+    //   userID: req.templateVars.user.id
+    // };
+    // userDatabase[id] = new User(id, email, hashedPass);
+    urlDatabase[shortURL] = new Url(shortURL, longURL, userID)
     res.redirect(`/urls/${shortURL}`);
   } else {
     req.templateVars.message = 'You do not have permission to do this.';
