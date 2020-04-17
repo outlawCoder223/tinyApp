@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
+const methodOverride = require('method-override')
 const { urlDatabase, userDatabase } = require('./database');
 const { PORT, KEY } = require('./constants');
 
@@ -12,6 +13,8 @@ app.use(cookieSession({
   name: 'session',
   keys: [KEY],
 }));
+
+app.use(methodOverride('_method'))
 
 app.set('view engine', 'ejs');
 

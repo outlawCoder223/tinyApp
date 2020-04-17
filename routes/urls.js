@@ -66,7 +66,7 @@ router.get('/:shortURL', (req, res) => {
 });
 
 // short URL update to new long URL
-router.post('/:shortURL', (req, res) => {
+router.put('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {
     res.redirect('/login');
@@ -80,7 +80,7 @@ router.post('/:shortURL', (req, res) => {
 });
 
 // delete the short URL
-router.post('/:shortURL/delete', (req, res) => {
+router.delete('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {
     res.redirect('/login');
