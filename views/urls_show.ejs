@@ -13,6 +13,9 @@
       <div class="card-body pr-0 pl-0">
         <h5 class="card-title ">TinyURL for: <%= longURL %></h5>
         <p class="card-text ">Short URL: <%= shortURL %></p>
+        <p class="card-text ">Date Created: <%= date %></p>
+        <p class="card-text ">Number of Unique Visits: <span class="text-info"><%= uniqueVisits %></span></p>
+        <p class="card-text ">Number of Total Visits: <span class="text-info"><%= visits.length %></span></p>
         <div class="container-fluid bg-light text-muted">
           <h3 class=" row justify-content-center mb-0">Edit</h5>
             <form class="form-inline row justify-content-center margin-0" action="/urls/<%= shortURL %>?_method=PUT" method="POST">
@@ -26,6 +29,26 @@
         
       </div>
       <div class="card-footer text-muted"></div>
+  </div>
+  <div class="container">
+    <table class="table border">
+      <thead>
+        <tr>
+          <th scope="col">User</th>
+          <th scope="col">Time Visited</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(const visit of visits) { %>
+          
+          <tr>
+            <td><%= visit.visitorID %></td>
+            <td><%= visit.time.toLocaleString() %></td>
+          </tr>
+          
+        <% } %>
+      </tbody>
+    </table>  
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

@@ -4,7 +4,8 @@ class Url {
     this.longURL = longURL;
     this.userID = userID;
     this.date = new Date().toDateString();
-    this.visits = 0;
+    this.visits = [];
+    this.visitors = {};
   }
 }
 

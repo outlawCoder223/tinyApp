@@ -57,10 +57,15 @@ router.get('/:shortURL', (req, res) => {
     req.templateVars.message = 'Please log-in to view this';
     res.status(403).render('urls_error', req.templateVars);
   } else if (urlDatabase[url].userID === req.templateVars.user.id) {
+    const currentUrl = urlDatabase[req.params.shortURL];
+    const uniqueVisits = Object.keys(currentUrl.visitors).length;
     const templateVars = {
       ...req.templateVars,
       shortURL: req.params.shortURL,
-      longURL: urlDatabase[req.params.shortURL].longURL
+      longURL: currentUrl.longURL,
+      visits: currentUrl.visits,
+      date: currentUrl.date,
+      uniqueVisits
     };
     res.render('urls_show', templateVars);
   } else {
@@ -74,7 +79,8 @@ router.get('/:shortURL', (req, res) => {
 router.put('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {
-    res.redirect('/login');
+    req.templateVars.message = 'You do not have permission to do this.';
+    res.status(403).render('urls_error', req.templateVars);
   } else if (urlDatabase[url].userID === req.templateVars.user.id) {
     urlDatabase[req.params.shortURL].longURL = req.body.update;
     res.redirect('/urls');
@@ -88,7 +94,8 @@ router.put('/:shortURL', (req, res) => {
 router.delete('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {
-    res.redirect('/login');
+    req.templateVars.message = 'You do not have permission to do this.';
+    res.status(403).render('urls_error', req.templateVars);
   } else if (urlDatabase[url].userID === req.templateVars.user.id) {
     delete urlDatabase[req.params.shortURL];
     res.redirect('/urls');
