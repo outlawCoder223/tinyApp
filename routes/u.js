@@ -5,11 +5,13 @@ const { urlDatabase } = require('../database');
 const { generateUniqueString } = require('../helpers');
 
 router.get('/:id', (req, res) => {
+  // sets new visitor cookie
   if (!req.session.visitor_id) {
     const id = generateUniqueString(urlDatabase[req.params.id].visitors);
     req.session.visitor_id = id;
     urlDatabase[req.params.id].visitors[id] = id;
   }
+  // updates url object w/ each new visit
   if (req.params.id in urlDatabase) {
     const url = urlDatabase[req.params.id].longURL;
     const visit = {
@@ -17,7 +19,6 @@ router.get('/:id', (req, res) => {
       time: new Date
     }
     urlDatabase[req.params.id].visits.push(visit);
-    console.log(urlDatabase[req.params.id])
     res.redirect(url);
   } else {
     req.templateVars.message = 'Not found';

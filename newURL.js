@@ -1,3 +1,4 @@
+// Url class
 class Url {
   constructor(shortURL, longURL, userID) {
     this.shortURL = shortURL;
