@@ -65,7 +65,7 @@ router.get('/:shortURL', (req, res) => {
   
 });
 
-// short URL update to new long URL
+// update short URL to new long URL
 router.put('/:shortURL', (req, res) => {
   const url = req.params.shortURL;
   if (!req.templateVars.user) {
